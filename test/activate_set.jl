@@ -103,7 +103,12 @@
                 orig_load_path = copy(LOAD_PATH)
                 push!(LOAD_PATH, mktempdir())  # put something weird in LOAD_PATH for testing
                 try
-                    # Generate the test/Manifest.toml that dev's the package itself
+                    # Both manifests are generated here rather than checked in with the
+                    # fixture, so that the manifest format always matches the running Julia
+                    # version and this test works on all of them. The `sources/*` fixtures
+                    # that do ship a Manifest.toml are only usable by the
+                    # `VERSION >= v"1.11"` testsets below; this one has to work back to 1.4.
+                    # First the test/Manifest.toml that dev's the package itself...
                     Pkg.activate(joinpath(pkg_path, "test"))
                     Pkg.develop(PackageSpec(path=pkg_path))
 
